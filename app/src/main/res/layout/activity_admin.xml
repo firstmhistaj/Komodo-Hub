@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/schoolback14"
+    tools:context=".AdminDashboardActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Manage Users Section -->
+        <TextView
+            android:id="@+id/admin_user_management_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="User Management"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/buttonAddUser"
+            android:layout_width="368dp"
+            android:layout_height="wrap_content"
+            android:text="Add User" />
+
+        <Button
+            android:id="@+id/buttonEditUser"
+            android:layout_width="370dp"
+            android:layout_height="wrap_content"
+            android:text="Edit User" />
+
+        <Button
+            android:id="@+id/buttonDeleteUser"
+            android:layout_width="372dp"
+            android:layout_height="wrap_content"
+            android:text="Delete User" />
+
+        <!-- Manage Courses Section -->
+        <TextView
+            android:id="@+id/admin_course_management_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Course Management"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/admin_add_course_btn"
+            android:layout_width="370dp"
+            android:layout_height="wrap_content"
+            android:text="Add Course" />
+
+        <Button
+            android:id="@+id/admin_edit_course_btn"
+            android:layout_width="368dp"
+            android:layout_height="wrap_content"
+            android:text="Edit Course" />
+
+        <Button
+            android:id="@+id/admin_delete_course_btn"
+            android:layout_width="370dp"
+            android:layout_height="wrap_content"
+            android:text="Delete Course" />
+
+        <!-- View System Stats Section -->
+        <TextView
+            android:id="@+id/admin_system_stats_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/colorWhite"
+            android:text="System Stats"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/admin_view_stats_btn"
+            android:layout_width="372dp"
+            android:layout_height="wrap_content"
+            android:text="View System Stats" />
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
