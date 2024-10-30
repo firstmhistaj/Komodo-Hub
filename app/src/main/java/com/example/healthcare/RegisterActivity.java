@@ -18,7 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText edUsername, edEmail, edPassword, edConfirm;
+    private EditText edFirstName, edUsername, edEmail, edPassword, edConfirm;
     private Button btnRegister;
     private TextView tvExistingUser;
     private Spinner userRoleSpinner;
