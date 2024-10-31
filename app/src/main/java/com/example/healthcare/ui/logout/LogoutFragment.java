@@ -24,8 +24,6 @@ public class LogoutFragment extends Fragment {
         binding = FragmentLogoutBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textView4;
-        logoutViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 

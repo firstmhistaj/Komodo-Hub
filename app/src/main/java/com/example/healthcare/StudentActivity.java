@@ -94,12 +94,12 @@ public class StudentActivity extends AppCompatActivity {
             }
         });
 
-        CardView cardTrackProgress= findViewById(R.id.cardTrackProgress);
-        cardTrackProgress.setOnClickListener(new View.OnClickListener() {
+        CardView cardChat= findViewById(R.id.cardChat);
+        cardChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Intent to start ViewCourseActivity
-                Intent intent = new Intent(StudentActivity.this, TrackProgressActivity.class);
+                Intent intent = new Intent(StudentActivity.this, ChatActivity.class);
                 startActivity(intent);
             }
         });

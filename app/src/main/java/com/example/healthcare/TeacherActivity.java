@@ -31,9 +31,12 @@ public class TeacherActivity extends AppCompatActivity {
         cardTrackStudentProgress.setOnClickListener(view -> openTrackProgressSection());
 
         cardNews.setOnClickListener(view -> openNewsSection());
+
+        cardChat.setOnClickListener(view -> openChatSection());
     }
 
     // Methods to open each section - here just examples, implement each as needed
+
 
 
     private void openAssignmentsSection() {
@@ -51,6 +54,11 @@ public class TeacherActivity extends AppCompatActivity {
 
     private void openNewsSection() {
         Intent intent = new Intent(TeacherActivity.this, NewsActivity.class);
+        startActivity(intent);
+    }
+
+    private void openChatSection() {
+        Intent intent = new Intent(TeacherActivity.this, ChatActivity.class);
         startActivity(intent);
     }
 }

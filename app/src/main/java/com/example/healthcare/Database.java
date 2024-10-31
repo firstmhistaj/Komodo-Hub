@@ -1,5 +1,6 @@
 package com.example.healthcare;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -8,18 +9,29 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Database extends SQLiteOpenHelper {
 
     // Database details
     private static final String DATABASE_NAME = "healthcare.db";
     private static final int DATABASE_VERSION = 1;
     private static final String TABLE_USERS = "users";
+    private static final String TABLE_MESSAGES = "messages";
 
-    // Table columns
+    // Table columns for users
     private static final String COLUMN_USERNAME = "username";
     private static final String COLUMN_EMAIL = "email";
     private static final String COLUMN_PASSWORD = "password";
     private static final String COLUMN_ROLE = "role"; // Role column added
+
+    // Table columns for messages
+    private static final String COLUMN_ID = "id";
+    private static final String COLUMN_SENDER_ID = "senderId";
+    private static final String COLUMN_RECEIVER_ID = "receiverId";
+    private static final String COLUMN_MESSAGE = "message";
+    private static final String COLUMN_TIMESTAMP = "timestamp";
 
     // SQL statement to create the users table
     private static final String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + " (" +
@@ -27,6 +39,14 @@ public class Database extends SQLiteOpenHelper {
             COLUMN_EMAIL + " TEXT, " +
             COLUMN_PASSWORD + " TEXT, " +
             COLUMN_ROLE + " TEXT);"; // Create table with role column
+
+    // SQL statement to create the messages table
+    private static final String CREATE_MESSAGES_TABLE = "CREATE TABLE " + TABLE_MESSAGES + " (" +
+            COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLUMN_SENDER_ID + " INTEGER, " +
+            COLUMN_RECEIVER_ID + " INTEGER, " +
+            COLUMN_MESSAGE + " TEXT, " +
+            COLUMN_TIMESTAMP + " TEXT);";
 
     public Database(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -36,12 +56,15 @@ public class Database extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         // Create the users table
         sqLiteDatabase.execSQL(CREATE_USERS_TABLE);
+        // Create the messages table
+        sqLiteDatabase.execSQL(CREATE_MESSAGES_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
-        // Drop older table if exists and recreate it
+        // Drop older tables if they exist and recreate them
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_MESSAGES);
         onCreate(sqLiteDatabase);
     }
 
@@ -98,5 +121,35 @@ public class Database extends SQLiteOpenHelper {
         db.close();
 
         return role; // Return the role of the user
+    }
+
+    // Method to send a message
+    public boolean sendMessage(int senderId, int receiverId, String message) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_SENDER_ID, senderId);
+        values.put(COLUMN_RECEIVER_ID, receiverId);
+        values.put(COLUMN_MESSAGE, message);
+        values.put(COLUMN_TIMESTAMP, String.valueOf(System.currentTimeMillis()));
+
+        long result = db.insert(TABLE_MESSAGES, null, values);
+        db.close(); // Close the database after operation
+        return result != -1; // Return true if insert was successful
+    }
+
+    // Method to get messages between two users
+    @SuppressLint("Range")
+    public List<String> getMessages(int userId, int otherUserId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<String> messages = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_MESSAGES + " WHERE (senderId = ? AND receiverId = ?) OR (senderId = ? AND receiverId = ?)",
+                new String[]{String.valueOf(userId), String.valueOf(otherUserId), String.valueOf(otherUserId), String.valueOf(userId)});
+
+        while (cursor.moveToNext()) {
+            messages.add(cursor.getString(cursor.getColumnIndex(COLUMN_MESSAGE)));
+        }
+        cursor.close();
+        db.close(); // Close the database after operation
+        return messages;
     }
 }
