@@ -20,7 +20,7 @@ public class Database extends SQLiteOpenHelper {
     private static final String TABLE_USERS = "users";
     private static final String TABLE_MESSAGES = "messages";
     private static final String TABLE_COURSES = "courses";
-    private static final String TABLE_COURSE_ASSIGNMENTS = "course_assignments";
+
 
     // Table columns for users
     private static final String COLUMN_USERNAME = "username";
@@ -39,10 +39,10 @@ public class Database extends SQLiteOpenHelper {
     private static final String COLUMN_COURSE_ID = "course_id";
     private static final String COLUMN_COURSE_NAME = "course_name";
 
-    // Table columns for course assignments
-    private static final String COLUMN_ASSIGNMENT_ID = "assignment_id";
-    private static final String COLUMN_ASSIGNED_USER_ID = "assigned_user_id";
-    private static final String COLUMN_ASSIGNED_COURSE_ID = "assigned_course_id";
+//    // Table columns for course assignments
+//    private static final String COLUMN_ASSIGNMENT_ID = "assignment_id";
+//    private static final String COLUMN_ASSIGNED_USER_ID = "assigned_user_id";
+//    private static final String COLUMN_ASSIGNED_COURSE_ID = "assigned_course_id";
 
 
     // SQL statement to create the courses table
@@ -50,13 +50,13 @@ public class Database extends SQLiteOpenHelper {
             COLUMN_COURSE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_COURSE_NAME + " TEXT UNIQUE NOT NULL);";
 
-    // SQL statement to create the course assignments table
-    private static final String CREATE_COURSE_ASSIGNMENTS_TABLE = "CREATE TABLE " + TABLE_COURSE_ASSIGNMENTS + " (" +
-            COLUMN_ASSIGNMENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            COLUMN_ASSIGNED_USER_ID + " TEXT, " +
-            COLUMN_ASSIGNED_COURSE_ID + " INTEGER, " +
-            "FOREIGN KEY(" + COLUMN_ASSIGNED_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USERNAME + "), " +
-            "FOREIGN KEY(" + COLUMN_ASSIGNED_COURSE_ID + ") REFERENCES " + TABLE_COURSES + "(" + COLUMN_COURSE_ID + "));";
+//    // SQL statement to create the course assignments table
+//    private static final String CREATE_COURSE_ASSIGNMENTS_TABLE = "CREATE TABLE " + TABLE_COURSE_ASSIGNMENTS + " (" +
+//            COLUMN_ASSIGNMENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+//            COLUMN_ASSIGNED_USER_ID + " TEXT, " +
+//            COLUMN_ASSIGNED_COURSE_ID + " INTEGER, " +
+//            "FOREIGN KEY(" + COLUMN_ASSIGNED_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USERNAME + "), " +
+//            "FOREIGN KEY(" + COLUMN_ASSIGNED_COURSE_ID + ") REFERENCES " + TABLE_COURSES + "(" + COLUMN_COURSE_ID + "));";
 
     // SQL statement to create the users table
     private static final String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + " (" +
@@ -87,8 +87,7 @@ public class Database extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_MESSAGES_TABLE);
         // Create the courses table
         sqLiteDatabase.execSQL(CREATE_COURSES_TABLE);
-        // Create the course assignment table
-        sqLiteDatabase.execSQL(CREATE_COURSE_ASSIGNMENTS_TABLE);
+
     }
 
     @Override
@@ -97,7 +96,7 @@ public class Database extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_MESSAGES);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_COURSES);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_COURSE_ASSIGNMENTS);
+
         onCreate(sqLiteDatabase);
     }
 
@@ -186,6 +185,15 @@ public class Database extends SQLiteOpenHelper {
         return messages;
     }
 
+    // Method to add a new course to the database
+    public boolean addCourse(String courseName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_COURSE_NAME, courseName);
 
+        long result = db.insert(TABLE_COURSES, null, values);
+        db.close(); // Close the database after operation
+
+        return result != -1; // Return true if insert was successful
+    }
 }
-
