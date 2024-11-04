@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/schoolback14"
-    tools:context=".AssignmentsActivity">
+    tools:context=".CourseActivity">
+
 
 
     <LinearLayout
@@ -20,7 +21,7 @@
             android:id="@+id/textViewAssignment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Assignments"
+            android:text="Course"
             android:textColor="@color/colorWhite"
             android:textSize="24sp"
             android:textStyle="bold"/>
@@ -36,5 +37,6 @@
 
 
     </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

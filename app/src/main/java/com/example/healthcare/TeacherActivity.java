@@ -33,6 +33,10 @@ public class TeacherActivity extends AppCompatActivity {
         cardNews.setOnClickListener(view -> openNewsSection());
 
         cardChat.setOnClickListener(view -> openChatSection());
+
+        cardCourse.setOnClickListener(view -> openCourseSection());
+
+        cardSubmission.setOnClickListener(view -> openSubmissionSection());
     }
 
     // Methods to open each section - here just examples, implement each as needed
@@ -59,6 +63,16 @@ public class TeacherActivity extends AppCompatActivity {
 
     private void openChatSection() {
         Intent intent = new Intent(TeacherActivity.this, ChatActivity.class);
+        startActivity(intent);
+    }
+
+    private void openCourseSection() {
+        Intent intent = new Intent(TeacherActivity.this, CourseActivity.class);
+        startActivity(intent);
+    }
+
+    private void openSubmissionSection() {
+        Intent intent = new Intent(TeacherActivity.this, SubmissionActivity.class);
         startActivity(intent);
     }
 }

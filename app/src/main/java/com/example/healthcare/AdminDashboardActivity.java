@@ -1,5 +1,6 @@
 package com.example.healthcare;
 
+import static com.example.healthcare.R.id.buttonAddCourse;
 import static com.example.healthcare.R.id.buttonAddUser;
 
 import android.content.Intent;
@@ -35,6 +36,20 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 // This is where you handle what happens when the button is clicked
                 // For example, to start a new activity:
                 Intent intent = new Intent(AdminDashboardActivity.this, RegisterActivity.class);  // Replace ViewCourseActivity with the activity you want to navigate to
+                startActivity(intent);
+            }
+
+        });
+
+
+        Button buttonAddCourse = findViewById(R.id.buttonAddCourse);
+        // Set an OnClickListener for the button
+        buttonAddCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // This is where you handle what happens when the button is clicked
+                // For example, to start a new activity:
+                Intent intent = new Intent(AdminDashboardActivity.this, AddCourseActivity.class);  // Replace ViewCourseActivity with the activity you want to navigate to
                 startActivity(intent);
             }
 
