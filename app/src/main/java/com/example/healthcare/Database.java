@@ -17,10 +17,11 @@ public class Database extends SQLiteOpenHelper {
 
     // Database details
     private static final String DATABASE_NAME = "healthcare.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String TABLE_USERS = "users";
     private static final String TABLE_MESSAGES = "messages";
     private static final String TABLE_COURSES = "courses";
+    private static final String TABLE_COURSE_ASSIGNMENTS = "course_assignments";
 
 
     // Table columns for users
@@ -40,24 +41,23 @@ public class Database extends SQLiteOpenHelper {
     private static final String COLUMN_COURSE_ID = "course_id";
     private static final String COLUMN_COURSE_NAME = "course_name";
 
-//    // Table columns for course assignments
-//    private static final String COLUMN_ASSIGNMENT_ID = "assignment_id";
-//    private static final String COLUMN_ASSIGNED_USER_ID = "assigned_user_id";
-//    private static final String COLUMN_ASSIGNED_COURSE_ID = "assigned_course_id";
-
+    // Define new table and columns for course assignments
+    private static final String COLUMN_ASSIGNMENT_ID = "assignment_id";
+    private static final String COLUMN_ASSIGNED_USER = "assigned_user";  // Username from TABLE_USERS
+    private static final String COLUMN_ASSIGNED_COURSE_ID = "assigned_course_id"; // Course ID from TABLE_COURSES
 
     // SQL statement to create the courses table
     private static final String CREATE_COURSES_TABLE = "CREATE TABLE " + TABLE_COURSES + " (" +
             COLUMN_COURSE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_COURSE_NAME + " TEXT UNIQUE NOT NULL);";
 
-//    // SQL statement to create the course assignments table
-//    private static final String CREATE_COURSE_ASSIGNMENTS_TABLE = "CREATE TABLE " + TABLE_COURSE_ASSIGNMENTS + " (" +
-//            COLUMN_ASSIGNMENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-//            COLUMN_ASSIGNED_USER_ID + " TEXT, " +
-//            COLUMN_ASSIGNED_COURSE_ID + " INTEGER, " +
-//            "FOREIGN KEY(" + COLUMN_ASSIGNED_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USERNAME + "), " +
-//            "FOREIGN KEY(" + COLUMN_ASSIGNED_COURSE_ID + ") REFERENCES " + TABLE_COURSES + "(" + COLUMN_COURSE_ID + "));";
+    // SQL to create the course assignments table
+    private static final String CREATE_COURSE_ASSIGNMENTS_TABLE = "CREATE TABLE " + TABLE_COURSE_ASSIGNMENTS + " (" +
+            COLUMN_ASSIGNMENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLUMN_ASSIGNED_USER + " TEXT, " +
+            COLUMN_ASSIGNED_COURSE_ID + " INTEGER, " +
+            "FOREIGN KEY(" + COLUMN_ASSIGNED_USER + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USERNAME + "), " +
+            "FOREIGN KEY(" + COLUMN_ASSIGNED_COURSE_ID + ") REFERENCES " + TABLE_COURSES + "(" + COLUMN_COURSE_ID + "));";
 
     // SQL statement to create the users table
     private static final String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + " (" +
@@ -87,6 +87,8 @@ public class Database extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_MESSAGES_TABLE);
         // Create the courses table
         sqLiteDatabase.execSQL(CREATE_COURSES_TABLE);
+        // Create assignments table
+        sqLiteDatabase.execSQL(CREATE_COURSE_ASSIGNMENTS_TABLE);
         Log.d("Database", "Tables created successfully");
 
     }
@@ -97,8 +99,11 @@ public class Database extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_MESSAGES);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_COURSES);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_COURSE_ASSIGNMENTS);
 
         onCreate(sqLiteDatabase);
+        Log.d("Database", "Database upgraded successfully from version " + oldVersion + " to " + newVersion);
+
     }
 
     // Method to register a user (now with role)
@@ -212,6 +217,46 @@ public class Database extends SQLiteOpenHelper {
         db.close(); // Close the database after operation
 
         return result != -1; // Return true if insert was successful
+    }
+
+    public boolean assignCourse(String username, String courseName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Check if the course exists and get its ID
+        Cursor courseCursor = db.rawQuery("SELECT " + COLUMN_COURSE_ID + " FROM " + TABLE_COURSES + " WHERE " + COLUMN_COURSE_NAME + " = ?", new String[]{courseName});
+        if (!courseCursor.moveToFirst()) {
+            Log.d("Database", "Course not found: " + courseName);
+            courseCursor.close();
+            db.close();
+            return false; // Course does not exist
+        }
+        int courseId = courseCursor.getInt(courseCursor.getColumnIndexOrThrow(COLUMN_COURSE_ID));
+        courseCursor.close();
+
+        // Check if the user exists
+        Cursor userCursor = db.rawQuery("SELECT * FROM " + TABLE_USERS + " WHERE " + COLUMN_USERNAME + " = ?", new String[]{username});
+        if (!userCursor.moveToFirst()) {
+            Log.d("Database", "User not found: " + username);
+            userCursor.close();
+            db.close();
+            return false; // User does not exist
+        }
+        userCursor.close();
+
+        // Assign course to user
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_ASSIGNED_USER, username);
+        values.put(COLUMN_ASSIGNED_COURSE_ID, courseId);
+        long result = db.insert(TABLE_COURSE_ASSIGNMENTS, null, values);
+        db.close();
+
+        if (result == -1) {
+            Log.d("Database", "Failed to assign course: " + courseName + " to user: " + username);
+            return false; // Failed to assign the course
+        }
+
+        Log.d("Database", "Course assigned successfully: " + courseName + " to user: " + username);
+        return true; // Assignment was successful
     }
 
 

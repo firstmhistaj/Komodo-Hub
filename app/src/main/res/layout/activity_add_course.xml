@@ -42,6 +42,7 @@
             android:id="@+id/editTextUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
             android:textColorHint="@color/colorWhite"
             android:hint="Enter Username" />
 
@@ -50,6 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColorHint="@color/colorWhite"
+            android:textColor="@color/colorWhite"
             android:hint="Enter Course Name" />
 
         <Button
