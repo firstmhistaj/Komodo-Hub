@@ -9,7 +9,6 @@
     tools:context=".ViewCourseActivity">
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -20,6 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Courses Enroll"
+            android:textColorHint="@color/colorWhite"
             android:textColor="@color/colorWhite"
             android:textSize="24sp"
             android:textStyle="bold"/>
@@ -27,10 +27,11 @@
         <ListView
             android:id="@+id/lv_courses"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/colorWhite"
             android:divider="@color/colorWhite"
             android:dividerHeight="1dp"
-            android:paddingTop="10dp"
-            android:layout_height="wrap_content"/>
+            android:paddingTop="10dp" />
 
 
     </LinearLayout>

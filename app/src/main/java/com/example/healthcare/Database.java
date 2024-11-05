@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -74,7 +75,6 @@ public class Database extends SQLiteOpenHelper {
             COLUMN_TIMESTAMP + " TEXT);";
 
 
-
     public Database(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -87,6 +87,7 @@ public class Database extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_MESSAGES_TABLE);
         // Create the courses table
         sqLiteDatabase.execSQL(CREATE_COURSES_TABLE);
+        Log.d("Database", "Tables created successfully");
 
     }
 
@@ -185,15 +186,33 @@ public class Database extends SQLiteOpenHelper {
         return messages;
     }
 
-    // Method to add a new course to the database
     public boolean addCourse(String courseName) {
         SQLiteDatabase db = this.getWritableDatabase();
+
+        // Check if the course already exists
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_COURSES + " WHERE " + COLUMN_COURSE_NAME + " = ?", new String[]{courseName});
+        if (cursor.moveToFirst()) {
+            Log.d("Database", "Course already exists: " + courseName);
+            cursor.close();
+            db.close();
+            return false; // Course already exists
+        }
+        cursor.close();
+
+        // Insert new course
         ContentValues values = new ContentValues();
         values.put(COLUMN_COURSE_NAME, courseName);
-
         long result = db.insert(TABLE_COURSES, null, values);
+
+        if (result != -1) {
+            Log.d("Database", "Course added successfully: " + courseName);
+        } else {
+            Log.d("Database", "Failed to add course: " + courseName);
+        }
         db.close(); // Close the database after operation
 
         return result != -1; // Return true if insert was successful
     }
+
+
 }
