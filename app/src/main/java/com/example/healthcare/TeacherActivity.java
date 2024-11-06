@@ -67,7 +67,7 @@ public class TeacherActivity extends AppCompatActivity {
     }
 
     private void openCourseSection() {
-        Intent intent = new Intent(TeacherActivity.this, CourseActivity.class);
+        Intent intent = new Intent(TeacherActivity.this, TeacherCoursesActivity.class);
         startActivity(intent);
     }
 

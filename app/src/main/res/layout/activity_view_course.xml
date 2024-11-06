@@ -28,6 +28,7 @@
             android:id="@+id/lv_courses"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
             android:textColorHint="@color/colorWhite"
             android:divider="@color/colorWhite"
             android:dividerHeight="1dp"

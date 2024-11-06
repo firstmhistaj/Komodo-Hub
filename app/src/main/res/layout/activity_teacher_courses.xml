@@ -6,35 +6,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/schoolback14"
-    tools:context=".CourseActivity">
+    tools:context=".TeacherCoursesActivity">
 
 
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/textViewAssignment"
+            android:id="@+id/textViewAssignedCourses"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Course"
+            android:text="Assigned Courses"
+            android:textColorHint="@color/colorWhite"
             android:textColor="@color/colorWhite"
-            android:textSize="24sp"
-            android:textStyle="bold"/>
+            android:textSize="18sp"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="8dp" />
 
         <ListView
-            android:id="@+id/listAssignments"
+            android:id="@+id/listViewCourses"
             android:layout_width="match_parent"
-            android:divider="@color/colorWhite"
-            android:cacheColorHint="@color/colorWhite"
-            android:dividerHeight="1dp"
-            android:paddingTop="10dp"
-            android:layout_height="wrap_content"/>
-
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

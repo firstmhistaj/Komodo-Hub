@@ -16,12 +16,14 @@ import java.util.List;
 public class Database extends SQLiteOpenHelper {
 
     // Database details
-    private static final String DATABASE_NAME = "healthcare.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final String DATABASE_NAME = "komodo_hub.db";
+    private static final int DATABASE_VERSION = 3;
     private static final String TABLE_USERS = "users";
     private static final String TABLE_MESSAGES = "messages";
     private static final String TABLE_COURSES = "courses";
     private static final String TABLE_COURSE_ASSIGNMENTS = "course_assignments";
+    private static final String TABLE_SCHOOLS = "schools";  // Added schools table
+
 
 
     // Table columns for users
@@ -29,6 +31,8 @@ public class Database extends SQLiteOpenHelper {
     private static final String COLUMN_EMAIL = "email";
     private static final String COLUMN_PASSWORD = "password";
     private static final String COLUMN_ROLE = "role"; // Role column added
+
+
 
     // Table columns for messages
     private static final String COLUMN_ID = "id";
@@ -45,6 +49,11 @@ public class Database extends SQLiteOpenHelper {
     private static final String COLUMN_ASSIGNMENT_ID = "assignment_id";
     private static final String COLUMN_ASSIGNED_USER = "assigned_user";  // Username from TABLE_USERS
     private static final String COLUMN_ASSIGNED_COURSE_ID = "assigned_course_id"; // Course ID from TABLE_COURSES
+
+    // Table columns for schools (new table)
+    private static final String COLUMN_SCHOOL_ID = "school_id";
+    private static final String COLUMN_SCHOOL_NAME = "school_name";  // School name
+
 
     // SQL statement to create the courses table
     private static final String CREATE_COURSES_TABLE = "CREATE TABLE " + TABLE_COURSES + " (" +
@@ -75,6 +84,12 @@ public class Database extends SQLiteOpenHelper {
             COLUMN_TIMESTAMP + " TEXT);";
 
 
+    // SQL statement to create the schools table (new table)
+    private static final String CREATE_SCHOOLS_TABLE = "CREATE TABLE " + TABLE_SCHOOLS + " (" +
+            COLUMN_SCHOOL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLUMN_SCHOOL_NAME + " TEXT UNIQUE NOT NULL);";
+
+
     public Database(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -89,9 +104,32 @@ public class Database extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_COURSES_TABLE);
         // Create assignments table
         sqLiteDatabase.execSQL(CREATE_COURSE_ASSIGNMENTS_TABLE);
+        // Create schools table
+        sqLiteDatabase.execSQL(CREATE_SCHOOLS_TABLE);
+
+
+
+        // Insert default system admin if it doesn't exist
+        insertDefaultSystemAdmin(sqLiteDatabase);
         Log.d("Database", "Tables created successfully");
 
     }
+
+    private void insertDefaultSystemAdmin(SQLiteDatabase db) {
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USERS + " WHERE " + COLUMN_USERNAME + " = ?", new String[]{"system_admin"});
+
+        if (!cursor.moveToFirst()) {
+            // Insert default system admin if it does not exist
+            ContentValues values = new ContentValues();
+            values.put(COLUMN_USERNAME, "system_admin");
+            values.put(COLUMN_PASSWORD, "Nigeria01@"); // Default password for system admin
+            values.put(COLUMN_ROLE, "system_admin");
+            db.insert(TABLE_USERS, null, values);
+            Log.d("Database", "Default system admin inserted.");
+        }
+        cursor.close();
+    }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
@@ -100,6 +138,7 @@ public class Database extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_MESSAGES);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_COURSES);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_COURSE_ASSIGNMENTS);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_SCHOOLS);  // Drop schools table
 
         onCreate(sqLiteDatabase);
         Log.d("Database", "Database upgraded successfully from version " + oldVersion + " to " + newVersion);
@@ -259,5 +298,60 @@ public class Database extends SQLiteOpenHelper {
         return true; // Assignment was successful
     }
 
+    // Method to retrieve courses assigned to a specific teacher
+    public List<String> getAssignedCourses(String teacherUsername) {
+        List<String> courses = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
 
+        // Assuming you have a table named "courses" with a column for teacher username
+        String query = "SELECT course_name FROM courses WHERE teacher_username = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{teacherUsername});
+
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") String courseName = cursor.getString(cursor.getColumnIndex("course_name"));
+                courses.add(courseName);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return courses;
+    }
+
+
+    // Method to add a school
+    public boolean addSchool(String schoolName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Check if the school already exists
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_SCHOOLS + " WHERE " + COLUMN_SCHOOL_NAME + " = ?", new String[]{schoolName});
+        if (cursor.moveToFirst()) {
+            cursor.close();
+            db.close();
+            return false;  // School already exists
+        }
+        cursor.close();
+
+        // Insert new school
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_SCHOOL_NAME, schoolName);
+        long result = db.insert(TABLE_SCHOOLS, null, values);
+        db.close();
+        return result != -1;  // Return true if insert was successful
+    }
+
+    // Method to get all schools
+    public List<String> getAllSchools() {
+        List<String> schools = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_SCHOOLS, null);
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") String schoolName = cursor.getString(cursor.getColumnIndex(COLUMN_SCHOOL_NAME));
+                schools.add(schoolName);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return schools;
+    }
 }

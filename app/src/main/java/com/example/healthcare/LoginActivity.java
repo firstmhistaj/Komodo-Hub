@@ -53,6 +53,22 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
+            // Check if login is for the system admin with default credentials
+            if (username.equals("system_admin") && password.equals("Nigeria01@")) {
+                Intent intent = new Intent(LoginActivity.this, SystemAdminActivity.class);
+                Toast.makeText(getApplicationContext(), "Logged in as System Admin", Toast.LENGTH_SHORT).show();
+
+                // Save system admin username in SharedPreferences
+                SharedPreferences sharedpreferences = getSharedPreferences("shared_prefs", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString("username", username);
+                editor.apply();
+
+                startActivity(intent);
+                finish(); // Close login activity
+                return;
+            }
+
             // Check if the login is successful
             if (db.login(username, password)) {
                 // Fetch user role from the database
@@ -60,6 +76,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 Intent intent;
                 switch (userRole) {
+
+
                     case "admin":
                         intent = new Intent(LoginActivity.this, AdminDashboardActivity.class);
                         Toast.makeText(getApplicationContext(), "Logged in as Admin", Toast.LENGTH_SHORT).show();
