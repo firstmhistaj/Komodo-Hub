@@ -30,13 +30,13 @@
             android:id="@+id/buttonAddUser"
             android:layout_width="368dp"
             android:layout_height="wrap_content"
-            android:text="Add User" />
+            android:text="Register Teacher/Student" />
 
         <Button
             android:id="@+id/buttonEditUser"
             android:layout_width="370dp"
             android:layout_height="wrap_content"
-            android:text="Edit User" />
+            android:text="Update User" />
 
         <Button
             android:id="@+id/buttonDeleteUser"
@@ -59,10 +59,10 @@
             android:id="@+id/buttonAddCourse"
             android:layout_width="370dp"
             android:layout_height="wrap_content"
-            android:text="Add Course" />
+            android:text="Register Course" />
 
         <Button
-            android:id="@+id/admin_edit_course_btn"
+            android:id="@+id/buttonUpdateCourse"
             android:layout_width="368dp"
             android:layout_height="wrap_content"
             android:text="Edit Course" />

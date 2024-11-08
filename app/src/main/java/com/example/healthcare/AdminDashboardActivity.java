@@ -16,6 +16,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class AdminDashboardActivity extends AppCompatActivity {
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +44,18 @@ public class AdminDashboardActivity extends AppCompatActivity {
         });
 
 
+        Button buttonEditUser = findViewById(R.id.buttonEditUser);
+
+        // Set click listener for Update User button
+        buttonEditUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AdminDashboardActivity.this, UpdateUserActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
         Button buttonAddCourse = findViewById(R.id.buttonAddCourse);
         // Set an OnClickListener for the button
         buttonAddCourse.setOnClickListener(new View.OnClickListener() {
@@ -55,7 +69,21 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
         });
 
+        Button buttonUpdateCourse = findViewById(R.id.buttonUpdateCourse);
+        buttonUpdateCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdminDashboardActivity.this, EditCourseActivity.class);
+
+                startActivity(intent);
+            }
+        });
+
+
+
     }
+
+
 
 
 }

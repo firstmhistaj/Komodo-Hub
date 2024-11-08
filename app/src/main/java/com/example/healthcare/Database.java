@@ -354,4 +354,35 @@ public class Database extends SQLiteOpenHelper {
         db.close();
         return schools;
     }
+
+    // Method to update user details in the database
+    public boolean updateUser(String username, String newEmail, String newPassword, String newRole) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        // Add values to ContentValues only if they are not null
+        if (newEmail != null) {
+            values.put(COLUMN_EMAIL, newEmail);
+        }
+        if (newPassword != null) {
+            values.put(COLUMN_PASSWORD, newPassword);
+        }
+        if (newRole != null) {
+            values.put(COLUMN_ROLE, newRole);
+        }
+
+        // Check if there is anything to update
+        if (values.size() == 0) {
+            // No values provided to update, return false
+            db.close();
+            return false;
+        }
+
+        // Execute the update operation
+        int rowsAffected = db.update(TABLE_USERS, values, COLUMN_USERNAME + " = ?", new String[]{username});
+        db.close(); // Close the database after the operation
+
+        // Return true if at least one row was updated
+        return rowsAffected > 0;
+    }
 }

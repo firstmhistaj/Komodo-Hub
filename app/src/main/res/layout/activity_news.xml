@@ -8,4 +8,6 @@
     android:background="@drawable/schoolback14"
     tools:context=".NewsActivity">
 
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
