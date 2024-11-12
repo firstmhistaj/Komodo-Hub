@@ -318,6 +318,29 @@ public class Database extends SQLiteOpenHelper {
     }
 
 
+
+
+
+    // Method to get all courses from the database
+    public List<String> getAllCourses() {
+        List<String> courses = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_COURSES, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") String courseName = cursor.getString(cursor.getColumnIndex(COLUMN_COURSE_NAME));
+                courses.add(courseName);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return courses;
+    }
+
+
+
+
     // Method to add a school
     public boolean addSchool(String schoolName) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -385,4 +408,7 @@ public class Database extends SQLiteOpenHelper {
         // Return true if at least one row was updated
         return rowsAffected > 0;
     }
+
+
+
 }
