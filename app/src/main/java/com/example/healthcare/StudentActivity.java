@@ -69,7 +69,7 @@ public class StudentActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Intent to start ViewCourseActivity
-                Intent intent = new Intent(StudentActivity.this, AssignmentsActivity.class);
+                Intent intent = new Intent(StudentActivity.this, TeacherAssignmentActivity.class);
                 startActivity(intent);
             }
         });

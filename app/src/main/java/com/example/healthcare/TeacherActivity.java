@@ -2,7 +2,7 @@ package com.example.healthcare;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -44,7 +44,7 @@ public class TeacherActivity extends AppCompatActivity {
 
 
     private void openAssignmentsSection() {
-        Intent intent = new Intent(TeacherActivity.this, AssignmentsActivity.class);
+        Intent intent = new Intent(TeacherActivity.this, TeacherAssignmentActivity.class);
         startActivity(intent);
     }
 

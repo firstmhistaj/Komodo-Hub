@@ -63,7 +63,7 @@
             android:name=".SubmitAssignmentActivity"
             android:exported="false" />
         <activity
-            android:name=".AssignmentsActivity"
+            android:name=".TeacherAssignmentActivity"
             android:exported="false" />
         <activity
             android:name=".ViewCourseActivity"
