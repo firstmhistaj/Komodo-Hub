@@ -1,0 +1,31 @@
+<!-- res/layout/activity_delete_user.xml -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Username input -->
+    <EditText
+        android:id="@+id/editTextUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Username" />
+
+    <!-- Role input -->
+    <EditText
+        android:id="@+id/editTextRole"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Role (e.g., student, teacher)" />
+
+    <!-- Delete User Button -->
+    <Button
+        android:id="@+id/buttonDeleteUser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete User" />
+
+</LinearLayout>

@@ -79,6 +79,28 @@ public class AdminDashboardActivity extends AppCompatActivity {
             }
         });
 
+        // Add the OnClickListener for "View System Stats" button
+        Button buttonViewStats = findViewById(R.id.admin_view_stats_btn);
+        buttonViewStats.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Open StatsActivity to show the system stats
+                Intent intent = new Intent(AdminDashboardActivity.this, StatsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Add the OnClickListener for "View System Stats" button
+        Button buttonDeleteUser = findViewById(R.id.buttonDeleteUser);
+        buttonDeleteUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Open StatsActivity to show the system stats
+                Intent intent = new Intent(AdminDashboardActivity.this, DeleteUserActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
 
     }

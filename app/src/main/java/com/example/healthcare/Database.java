@@ -11,6 +11,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Database extends SQLiteOpenHelper {
@@ -145,19 +146,62 @@ public class Database extends SQLiteOpenHelper {
 
     }
 
+    // Method to retrieve courses assigned to a specific user
+    // In Database.java
+    public List<String> getCoursesForUser(String username) {
+        List<String> courses = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Query to retrieve course names assigned to the user
+        String query = "SELECT c." + COLUMN_COURSE_NAME +
+                " FROM " + TABLE_COURSE_ASSIGNMENTS + " ca " +
+                " JOIN " + TABLE_COURSES + " c ON ca." + COLUMN_ASSIGNED_COURSE_ID + " = c." + COLUMN_COURSE_ID +
+                " WHERE ca." + COLUMN_ASSIGNED_USER + " = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{username});
+
+        if (cursor.moveToFirst()) {
+            do {
+                String courseName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COURSE_NAME));
+                courses.add(courseName);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return courses;
+    }
+
+
+
     // Method to register a user (now with role)
     public boolean register(String username, String email, String password, String role) {
+        // Create ContentValues object to store the user details
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_USERNAME, username);
         cv.put(COLUMN_EMAIL, email);
         cv.put(COLUMN_PASSWORD, password);
         cv.put(COLUMN_ROLE, role); // Store the role in the database
 
+        // Get writable database instance
         SQLiteDatabase db = this.getWritableDatabase();
+
+        // Perform the insert operation
         long result = db.insert(TABLE_USERS, null, cv);
-        db.close();
-        return result != -1; // Return true if insert was successful
+
+        // Check if the insert was successful
+        if (result == -1) {
+            Log.d("Database", "User registration failed for: " + username);
+            db.close();
+            return false; // Insert failed
+        } else {
+            Log.d("Database", "User registered successfully: " + username);
+        }
+
+        db.close(); // Close the database after operation
+        return true; // Return true if insert was successful
     }
+
 
     // Method to login
     public boolean login(String username, String password) {
@@ -298,28 +342,6 @@ public class Database extends SQLiteOpenHelper {
         return true; // Assignment was successful
     }
 
-    // Method to retrieve courses assigned to a specific teacher
-    public List<String> getAssignedCourses(String teacherUsername) {
-        List<String> courses = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        // Assuming you have a table named "courses" with a column for teacher username
-        String query = "SELECT course_name FROM courses WHERE teacher_username = ?";
-        Cursor cursor = db.rawQuery(query, new String[]{teacherUsername});
-
-        if (cursor.moveToFirst()) {
-            do {
-                @SuppressLint("Range") String courseName = cursor.getString(cursor.getColumnIndex("course_name"));
-                courses.add(courseName);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        return courses;
-    }
-
-
-
-
 
     // Method to get all courses from the database
     public List<String> getAllCourses() {
@@ -410,5 +432,67 @@ public class Database extends SQLiteOpenHelper {
     }
 
 
+    public HashMap<String, Integer> getUserStats() {
+        HashMap<String, Integer> stats = new HashMap<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Query to count the number of students
+        Cursor studentCursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_USERS + " WHERE " + COLUMN_ROLE + " = ?", new String[]{"student"});
+        if (studentCursor.moveToFirst()) {
+            int studentCount = studentCursor.getInt(0);
+            stats.put("students", studentCount);
+            Log.d("Database", "Number of students: " + studentCount);
+        }
+        studentCursor.close();
+
+        // Query to count the number of teachers
+        Cursor teacherCursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_USERS + " WHERE " + COLUMN_ROLE + " = ?", new String[]{"teacher"});
+        if (teacherCursor.moveToFirst()) {
+            int teacherCount = teacherCursor.getInt(0);
+            stats.put("teachers", teacherCount);
+            Log.d("Database", "Number of teachers: " + teacherCount);
+        }
+        teacherCursor.close();
+
+        // Query to count the number of other roles (if needed)
+        Cursor adminCursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_USERS + " WHERE " + COLUMN_ROLE + " = ?", new String[]{"admin"});
+        if (adminCursor.moveToFirst()) {
+            int adminCount = adminCursor.getInt(0);
+            stats.put("admins", adminCount);
+        }
+        adminCursor.close();
+
+        // Query to count total number of users
+        Cursor totalUsersCursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_USERS, null);
+        if (totalUsersCursor.moveToFirst()) {
+            int totalUserCount = totalUsersCursor.getInt(0);
+            stats.put("total_users", totalUserCount);
+        }
+        totalUsersCursor.close();
+
+        db.close();
+        return stats;
+    }
+
+
+    // Inside Database.java
+    public boolean deleteUser(String username) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Delete the user from the assignments table if assigned to any courses
+        db.delete(TABLE_COURSE_ASSIGNMENTS, COLUMN_ASSIGNED_USER + " = ?", new String[]{username});
+
+        // Delete the user's messages as sender or receiver
+        db.delete(TABLE_MESSAGES, COLUMN_SENDER_ID + " = ?", new String[]{username});
+        db.delete(TABLE_MESSAGES, COLUMN_RECEIVER_ID + " = ?", new String[]{username});
+
+        // Finally, delete the user from the users table
+        int rowsDeleted = db.delete(TABLE_USERS, COLUMN_USERNAME + " = ?", new String[]{username});
+
+        db.close();
+
+        // Return true if at least one row was deleted
+        return rowsDeleted > 0;
+    }
 
 }
