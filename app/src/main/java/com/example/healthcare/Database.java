@@ -16,7 +16,6 @@ import java.util.List;
 
 public class Database extends SQLiteOpenHelper {
 
-    // Database details
     private static final String DATABASE_NAME = "komodo_hub.db";
     private static final int DATABASE_VERSION = 3;
     private static final String TABLE_USERS = "users";
@@ -26,14 +25,10 @@ public class Database extends SQLiteOpenHelper {
     private static final String TABLE_SCHOOLS = "schools";  // Added schools table
 
 
-
-    // Table columns for users
     private static final String COLUMN_USERNAME = "username";
     private static final String COLUMN_EMAIL = "email";
     private static final String COLUMN_PASSWORD = "password";
     private static final String COLUMN_ROLE = "role"; // Role column added
-
-
 
     // Table columns for messages
     private static final String COLUMN_ID = "id";
@@ -97,18 +92,11 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        // Create the users table
         sqLiteDatabase.execSQL(CREATE_USERS_TABLE);
-        // Create the messages table
         sqLiteDatabase.execSQL(CREATE_MESSAGES_TABLE);
-        // Create the courses table
         sqLiteDatabase.execSQL(CREATE_COURSES_TABLE);
-        // Create assignments table
         sqLiteDatabase.execSQL(CREATE_COURSE_ASSIGNMENTS_TABLE);
-        // Create schools table
         sqLiteDatabase.execSQL(CREATE_SCHOOLS_TABLE);
-
-
 
         // Insert default system admin if it doesn't exist
         insertDefaultSystemAdmin(sqLiteDatabase);
@@ -140,14 +128,11 @@ public class Database extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_COURSES);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_COURSE_ASSIGNMENTS);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_SCHOOLS);  // Drop schools table
-
         onCreate(sqLiteDatabase);
         Log.d("Database", "Database upgraded successfully from version " + oldVersion + " to " + newVersion);
 
     }
 
-    // Method to retrieve courses assigned to a specific user
-    // In Database.java
     public List<String> getCoursesForUser(String username) {
         List<String> courses = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -159,19 +144,17 @@ public class Database extends SQLiteOpenHelper {
                 " WHERE ca." + COLUMN_ASSIGNED_USER + " = ?";
 
         Cursor cursor = db.rawQuery(query, new String[]{username});
-
         if (cursor.moveToFirst()) {
             do {
                 String courseName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COURSE_NAME));
                 courses.add(courseName);
             } while (cursor.moveToNext());
         }
-
+        Log.d("Database", "Courses retrieved for user " + username + ": " + courses);
         cursor.close();
         db.close();
         return courses;
     }
-
 
 
     // Method to register a user (now with role)
@@ -182,11 +165,7 @@ public class Database extends SQLiteOpenHelper {
         cv.put(COLUMN_EMAIL, email);
         cv.put(COLUMN_PASSWORD, password);
         cv.put(COLUMN_ROLE, role); // Store the role in the database
-
-        // Get writable database instance
         SQLiteDatabase db = this.getWritableDatabase();
-
-        // Perform the insert operation
         long result = db.insert(TABLE_USERS, null, cv);
 
         // Check if the insert was successful
@@ -197,51 +176,37 @@ public class Database extends SQLiteOpenHelper {
         } else {
             Log.d("Database", "User registered successfully: " + username);
         }
-
-        db.close(); // Close the database after operation
-        return true; // Return true if insert was successful
+        db.close();
+        return true;
     }
-
 
     // Method to login
     public boolean login(String username, String password) {
-        // Get readable database
         SQLiteDatabase db = this.getReadableDatabase();
 
         // Define the query
         String query = "SELECT * FROM " + TABLE_USERS + " WHERE " + COLUMN_USERNAME + " = ? AND " + COLUMN_PASSWORD + " = ?";
         Cursor cursor = db.rawQuery(query, new String[]{username, password});
-
-        // Check if a user exists with the given username and password
         boolean isValidUser = cursor.moveToFirst();
-
-        // Close the cursor and database
         cursor.close();
         db.close();
 
-        return isValidUser; // Return true if user exists, false otherwise
+        return isValidUser;
     }
 
     // Method to get the role of the user based on the username
     public String getUserRole(String username) {
-        // Get readable database
         SQLiteDatabase db = this.getReadableDatabase();
-
-        // Define the query
         String query = "SELECT " + COLUMN_ROLE + " FROM " + TABLE_USERS + " WHERE " + COLUMN_USERNAME + " = ?";
         Cursor cursor = db.rawQuery(query, new String[]{username});
 
         String role = null;
         if (cursor.moveToFirst()) {
-            // Retrieve the role of the user
             role = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ROLE));
         }
-
-        // Close the cursor and database
         cursor.close();
         db.close();
-
-        return role; // Return the role of the user
+        return role;
     }
 
     // Method to send a message
@@ -252,9 +217,8 @@ public class Database extends SQLiteOpenHelper {
         values.put(COLUMN_RECEIVER_ID, receiverId);
         values.put(COLUMN_MESSAGE, message);
         values.put(COLUMN_TIMESTAMP, String.valueOf(System.currentTimeMillis()));
-
         long result = db.insert(TABLE_MESSAGES, null, values);
-        db.close(); // Close the database after operation
+        db.close();
         return result != -1; // Return true if insert was successful
     }
 
@@ -270,20 +234,18 @@ public class Database extends SQLiteOpenHelper {
             messages.add(cursor.getString(cursor.getColumnIndex(COLUMN_MESSAGE)));
         }
         cursor.close();
-        db.close(); // Close the database after operation
+        db.close();
         return messages;
     }
 
     public boolean addCourse(String courseName) {
         SQLiteDatabase db = this.getWritableDatabase();
-
-        // Check if the course already exists
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_COURSES + " WHERE " + COLUMN_COURSE_NAME + " = ?", new String[]{courseName});
         if (cursor.moveToFirst()) {
             Log.d("Database", "Course already exists: " + courseName);
             cursor.close();
             db.close();
-            return false; // Course already exists
+            return false;
         }
         cursor.close();
 
@@ -291,15 +253,13 @@ public class Database extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_COURSE_NAME, courseName);
         long result = db.insert(TABLE_COURSES, null, values);
-
         if (result != -1) {
             Log.d("Database", "Course added successfully: " + courseName);
         } else {
             Log.d("Database", "Failed to add course: " + courseName);
         }
-        db.close(); // Close the database after operation
-
-        return result != -1; // Return true if insert was successful
+        db.close();
+        return result != -1;
     }
 
     public boolean assignCourse(String username, String courseName) {
@@ -311,7 +271,7 @@ public class Database extends SQLiteOpenHelper {
             Log.d("Database", "Course not found: " + courseName);
             courseCursor.close();
             db.close();
-            return false; // Course does not exist
+            return false;
         }
         int courseId = courseCursor.getInt(courseCursor.getColumnIndexOrThrow(COLUMN_COURSE_ID));
         courseCursor.close();
@@ -322,7 +282,7 @@ public class Database extends SQLiteOpenHelper {
             Log.d("Database", "User not found: " + username);
             userCursor.close();
             db.close();
-            return false; // User does not exist
+            return false;
         }
         userCursor.close();
 
@@ -335,11 +295,10 @@ public class Database extends SQLiteOpenHelper {
 
         if (result == -1) {
             Log.d("Database", "Failed to assign course: " + courseName + " to user: " + username);
-            return false; // Failed to assign the course
+            return false;
         }
-
         Log.d("Database", "Course assigned successfully: " + courseName + " to user: " + username);
-        return true; // Assignment was successful
+        return true;
     }
 
 
@@ -361,8 +320,6 @@ public class Database extends SQLiteOpenHelper {
     }
 
 
-
-
     // Method to add a school
     public boolean addSchool(String schoolName) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -372,16 +329,15 @@ public class Database extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             cursor.close();
             db.close();
-            return false;  // School already exists
+            return false;
         }
         cursor.close();
-
         // Insert new school
         ContentValues values = new ContentValues();
         values.put(COLUMN_SCHOOL_NAME, schoolName);
         long result = db.insert(TABLE_SCHOOLS, null, values);
         db.close();
-        return result != -1;  // Return true if insert was successful
+        return result != -1;
     }
 
     // Method to get all schools
@@ -405,7 +361,6 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        // Add values to ContentValues only if they are not null
         if (newEmail != null) {
             values.put(COLUMN_EMAIL, newEmail);
         }
@@ -415,19 +370,13 @@ public class Database extends SQLiteOpenHelper {
         if (newRole != null) {
             values.put(COLUMN_ROLE, newRole);
         }
-
-        // Check if there is anything to update
         if (values.size() == 0) {
-            // No values provided to update, return false
+
             db.close();
             return false;
         }
-
-        // Execute the update operation
         int rowsAffected = db.update(TABLE_USERS, values, COLUMN_USERNAME + " = ?", new String[]{username});
-        db.close(); // Close the database after the operation
-
-        // Return true if at least one row was updated
+        db.close();
         return rowsAffected > 0;
     }
 
@@ -478,20 +427,12 @@ public class Database extends SQLiteOpenHelper {
     // Inside Database.java
     public boolean deleteUser(String username) {
         SQLiteDatabase db = this.getWritableDatabase();
-
-        // Delete the user from the assignments table if assigned to any courses
         db.delete(TABLE_COURSE_ASSIGNMENTS, COLUMN_ASSIGNED_USER + " = ?", new String[]{username});
-
-        // Delete the user's messages as sender or receiver
         db.delete(TABLE_MESSAGES, COLUMN_SENDER_ID + " = ?", new String[]{username});
         db.delete(TABLE_MESSAGES, COLUMN_RECEIVER_ID + " = ?", new String[]{username});
-
-        // Finally, delete the user from the users table
         int rowsDeleted = db.delete(TABLE_USERS, COLUMN_USERNAME + " = ?", new String[]{username});
 
         db.close();
-
-        // Return true if at least one row was deleted
         return rowsDeleted > 0;
     }
 

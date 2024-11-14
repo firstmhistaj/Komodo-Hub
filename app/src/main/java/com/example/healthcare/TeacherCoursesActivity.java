@@ -1,6 +1,5 @@
 package com.example.healthcare;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -14,29 +13,34 @@ public class TeacherCoursesActivity extends AppCompatActivity {
     private Database database;
     private ListView listViewCourses;
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_teacher);
+        setContentView(R.layout.activity_teacher_courses);
 
-        // Initialize database and UI elements
-        database = new Database(this);
         listViewCourses = findViewById(R.id.listViewCourses);
 
-        String loggedInUsername = getIntent().getStringExtra("username"); // Make sure to pass this from the login activity
+        // Retrieve the username from the Intent
+        String username = getIntent().getStringExtra("username");
 
+        if (username != null) {
+            database = new Database(this);
 
-        // Retrieve assigned courses for debugging
-        List<String> assignedCourses = database.getCoursesForUser(loggedInUsername);
-        Log.d("TeacherCoursesActivity", "Assigned Courses: " + assignedCourses);
-
-        // Display courses or a toast message if no courses found
-        if (assignedCourses.isEmpty()) {
-            Toast.makeText(this, "No courses assigned", Toast.LENGTH_SHORT).show();
+            // Fetch and display courses
+            List<String> assignedCourses = database.getCoursesForUser(username);
+            displayCourses(assignedCourses);
         } else {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, assignedCourses);
+            Log.d("TeacherCoursesActivity", "Username is missing from intent");
+            Toast.makeText(this, "Username not provided", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void displayCourses(List<String> courses) {
+        if (courses != null && !courses.isEmpty()) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, courses);
             listViewCourses.setAdapter(adapter);
+        } else {
+            Toast.makeText(this, "No courses assigned to this teacher", Toast.LENGTH_SHORT).show();
         }
     }
 }
