@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment">
+    tools:context="com.example.komodo_hub.ui.home.HomeFragment">
 
 
         <GridLayout
@@ -204,7 +204,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="CHAT"
+                                    android:text="MESSAGE"
                                     android:textAlignment="center"
                                     android:textColor="@color/colorBlack"
                                     android:textStyle="bold"
@@ -237,13 +237,13 @@
 
                                 <ImageView
                                     android:layout_width="100dp"
-                                    android:layout_height="70dp"
+                                    android:layout_height="60dp"
                                     android:src="@drawable/baseline_newspaper_24"
                                     tools:ignore="ContentDescription" />
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="NEWS"
+                                    android:text="COMMUNITY"
                                     android:textAlignment="center"
                                     android:textColor="@color/colorBlack"
                                     android:textStyle="bold"/>

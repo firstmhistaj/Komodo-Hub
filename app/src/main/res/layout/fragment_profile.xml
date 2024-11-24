@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/schoolback14"
-    tools:context=".ui.profile.ProfileFragment">
+    tools:context="com.example.komodo_hub.ui.profile.ProfileFragment">
 
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"

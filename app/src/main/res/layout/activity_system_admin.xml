@@ -1,116 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
     android:background="@drawable/schoolback14"
     android:padding="24dp">
 
-    <!-- Title TextView -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="System Admin - Register School and Admin"
-        android:textColor="@color/colorWhite"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="24dp" />
-
-    <!-- School Name Input -->
-    <EditText
-        android:id="@+id/editSchoolName"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="School Name"
-        android:backgroundTint="@color/colorWhite"
-        android:textColorHint="@color/colorWhite"
-        android:textColor="@color/colorWhite"
-        android:padding="12dp"
-        android:inputType="text"
-        android:layout_marginBottom="16dp" />
+        android:orientation="vertical"
+        android:gravity="center">
 
-    <!-- Register School Button -->
-    <Button
-        android:id="@+id/btnRegisterSchool"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Register School"
-        android:textColor="@color/colorWhite"
-        android:padding="12dp"
-        android:textStyle="bold"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="24dp" />
+        <!-- Title TextView -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="System Admin - Register School and Admin"
+            android:textColor="@color/colorWhite"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="24dp" />
 
-    <!-- School Admin Username Input -->
-    <EditText
-        android:id="@+id/editAdminUsername"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Admin Username"
-        android:backgroundTint="@color/colorWhite"
-        android:textColorHint="@color/colorWhite"
-        android:textColor="@color/colorWhite"
-        android:padding="12dp"
-        android:inputType="text"
-        android:layout_marginBottom="16dp" />
+        <!-- School Name Input -->
+        <EditText
+            android:id="@+id/editSchoolName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="School Name"
+            android:backgroundTint="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:textColor="@color/colorWhite"
+            android:padding="12dp"
+            android:inputType="text"
+            android:layout_marginBottom="16dp" />
 
-    <!-- School Admin Email Input -->
-    <EditText
-        android:id="@+id/editAdminEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Admin Email"
-        android:backgroundTint="@color/colorWhite"
-        android:textColorHint="@color/colorWhite"
-        android:textColor="@color/colorWhite"
-        android:padding="12dp"
-        android:inputType="textEmailAddress"
-        android:layout_marginBottom="16dp" />
+        <!-- Address Line 1 Input -->
+        <EditText
+            android:id="@+id/editAddressLine1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Address Line 1"
+            android:backgroundTint="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:textColor="@color/colorWhite"
+            android:padding="12dp"
+            android:inputType="text"
+            android:layout_marginBottom="16dp" />
 
-    <!-- School Admin Password Input -->
-    <EditText
-        android:id="@+id/editAdminPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Admin Password"
-        android:backgroundTint="@color/colorWhite"
-        android:textColorHint="@color/colorWhite"
-        android:textColor="@color/colorWhite"
-        android:padding="12dp"
-        android:inputType="textPassword"
-        android:layout_marginBottom="16dp" />
+        <!-- City Input -->
+        <EditText
+            android:id="@+id/editCity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="City"
+            android:backgroundTint="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:textColor="@color/colorWhite"
+            android:padding="12dp"
+            android:inputType="text"
+            android:layout_marginBottom="16dp" />
 
-    <!-- Role Input (New TextField) -->
-    <EditText
-        android:id="@+id/editAdminRole"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Role"
-        android:backgroundTint="@color/colorWhite"
-        android:textColorHint="@color/colorWhite"
-        android:textColor="@color/colorWhite"
-        android:padding="12dp"
-        android:inputType="text"
-        android:layout_marginBottom="24dp" />
+        <!-- State Input -->
+        <EditText
+            android:id="@+id/editState"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="State"
+            android:backgroundTint="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:textColor="@color/colorWhite"
+            android:padding="12dp"
+            android:inputType="text"
+            android:layout_marginBottom="16dp" />
 
-    <!-- Register Admin Button -->
-    <Button
-        android:id="@+id/btnRegisterAdmin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Register Admin"
-        android:textColor="@color/colorWhite"
-        android:padding="12dp"
-        android:textStyle="bold"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="24dp" />
+        <!-- Country Input -->
+        <EditText
+            android:id="@+id/editCountry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Country"
+            android:backgroundTint="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:textColor="@color/colorWhite"
+            android:padding="12dp"
+            android:inputType="text"
+            android:layout_marginBottom="16dp" />
 
-    <!-- Back Button to Login -->
-    <Button
-        android:id="@+id/btnBackToLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Back to Login" />
-</LinearLayout>
+        <!-- Postal Code Input -->
+        <EditText
+            android:id="@+id/editPostalCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Postal Code"
+            android:backgroundTint="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:textColor="@color/colorWhite"
+            android:padding="12dp"
+            android:inputType="number"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Register School Button -->
+        <Button
+            android:id="@+id/btnRegisterSchool"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Register School"
+            android:textColor="@color/colorWhite"
+            android:padding="12dp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="24dp" />
+
+        <!-- School Admin Username Input -->
+        <EditText
+            android:id="@+id/editAdminUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Admin Username"
+            android:backgroundTint="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:textColor="@color/colorWhite"
+            android:padding="12dp"
+            android:inputType="text"
+            android:layout_marginBottom="16dp" />
+
+        <!-- School Admin Email Input -->
+        <EditText
+            android:id="@+id/editAdminEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Admin Email"
+            android:backgroundTint="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:textColor="@color/colorWhite"
+            android:padding="12dp"
+            android:inputType="textEmailAddress"
+            android:layout_marginBottom="16dp" />
+
+        <!-- School Admin Password Input -->
+        <EditText
+            android:id="@+id/editAdminPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Admin Password"
+            android:backgroundTint="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:textColor="@color/colorWhite"
+            android:padding="12dp"
+            android:inputType="textPassword"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Role Input -->
+        <EditText
+            android:id="@+id/editAdminRole"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Role"
+            android:backgroundTint="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:textColor="@color/colorWhite"
+            android:padding="12dp"
+            android:inputType="text"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Register Admin Button -->
+        <Button
+            android:id="@+id/btnRegisterAdmin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Register Admin"
+            android:textColor="@color/colorWhite"
+            android:padding="12dp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Back Button to Login -->
+        <Button
+            android:id="@+id/btnBackToLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Back to Login" />
+    </LinearLayout>
+</ScrollView>

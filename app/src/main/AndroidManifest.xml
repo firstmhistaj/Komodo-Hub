@@ -13,76 +13,82 @@
         android:theme="@style/Theme.Healthcare"
         tools:targetApi="31">
         <activity
-            android:name=".DeleteUserActivity"
+            android:name="com.example.komodo_hub.NewsDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".StatsActivity"
+            android:name="com.example.komodo_hub.CourseDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".EditCourseActivity"
+            android:name="com.example.komodo_hub.DeleteUserActivity"
             android:exported="false" />
         <activity
-            android:name=".UpdateUserActivity"
+            android:name="com.example.komodo_hub.StatsActivity"
             android:exported="false" />
         <activity
-            android:name=".SystemAdminActivity"
+            android:name="com.example.komodo_hub.EditCourseActivity"
             android:exported="false" />
         <activity
-            android:name=".AddCourseActivity"
+            android:name="com.example.komodo_hub.UpdateUserActivity"
             android:exported="false" />
         <activity
-            android:name=".SubmissionActivity"
+            android:name="com.example.komodo_hub.SystemAdminActivity"
             android:exported="false" />
         <activity
-            android:name=".TeacherCoursesActivity"
+            android:name="com.example.komodo_hub.AddCourseActivity"
             android:exported="false" />
         <activity
-            android:name=".ChatActivity"
+            android:name="com.example.komodo_hub.SubmissionActivity"
             android:exported="false" />
         <activity
-            android:name=".NewsActivity"
+            android:name="com.example.komodo_hub.TeacherCoursesActivity"
             android:exported="false" />
         <activity
-            android:name=".AdminDashboardActivity"
+            android:name="com.example.komodo_hub.ChatActivity"
             android:exported="false" />
         <activity
-            android:name=".TeacherActivity"
+            android:name="com.example.komodo_hub.NewsActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.komodo_hub.AdminDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.komodo_hub.TeacherActivity"
             android:exported="false"
             android:label="@string/title_activity_teacher"
             android:theme="@style/Theme.Healthcare.NoActionBar" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.komodo_hub.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".TrackProgressActivity"
+            android:name="com.example.komodo_hub.TrackProgressActivity"
             android:exported="false" />
         <activity
-            android:name=".ViewGradesActivity"
+            android:name="com.example.komodo_hub.ViewGradesActivity"
             android:exported="false" />
         <activity
-            android:name=".SubmitAssignmentActivity"
+            android:name="com.example.komodo_hub.SubmitAssignmentActivity"
             android:exported="false" />
         <activity
-            android:name=".TeacherAssignmentActivity"
+            android:name="com.example.komodo_hub.TeacherAssignmentActivity"
             android:exported="false" />
         <activity
-            android:name=".ViewCourseActivity"
+            android:name="com.example.komodo_hub.ViewCourseActivity"
             android:exported="false"
             android:label="@string/title_activity_view_course"
             android:theme="@style/Theme.Healthcare.NoActionBar" />
         <activity
-            android:name=".StudentActivity"
+            android:name="com.example.komodo_hub.StudentActivity"
             android:exported="false"
             android:label="@string/title_activity_student"
             android:theme="@style/Theme.Healthcare.NoActionBar" />
         <activity
-            android:name=".HomeActivity"
+            android:name="com.example.komodo_hub.HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name="com.example.komodo_hub.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".FirstPageActivity"
+            android:name="com.example.komodo_hub.FirstPageActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -91,7 +97,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegisterActivity"
+            android:name="com.example.komodo_hub.RegisterActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

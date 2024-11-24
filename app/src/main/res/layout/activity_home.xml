@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/schoolback14"
-    tools:context=".HomeActivity">
+    tools:context="com.example.komodo_hub.HomeActivity">
 
     <TextView
         android:id="@+id/titleHome"

@@ -1,10 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".NewsActivity">
 
+    <!-- Search bar -->
+    <EditText
+        android:id="@+id/editTextSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Search communities..."
+        android:padding="8dp"
+        android:drawableStart="@android:drawable/ic_menu_search"
+        android:drawablePadding="8dp"
+        android:background="@android:drawable/edit_text"
+        android:textSize="16sp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Title input -->
+    <EditText
+        android:id="@+id/editTextNewsTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Community Title"
+        android:textSize="16sp"
+        android:padding="8dp" />
+
+    <!-- Description input -->
+    <EditText
+        android:id="@+id/editTextNewsDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Community Description"
+        android:textSize="16sp"
+        android:padding="8dp"
+        android:inputType="textMultiLine" />
+
+    <!-- Content input (optional) -->
+    <EditText
+        android:id="@+id/editTextNewsContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Community Content"
+        android:textSize="16sp"
+        android:padding="8dp"
+        android:inputType="textMultiLine"
+        android:minHeight="120dp"
+        android:gravity="top" />
+
+    <!-- Link input (optional) -->
+    <EditText
+        android:id="@+id/editTextNewsLink"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Add Link (Optional)"
+        android:textSize="16sp"
+        android:padding="8dp" />
+
+    <!-- Button to upload file -->
+    <Button
+        android:id="@+id/buttonUploadFile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload File"
+        android:layout_marginTop="12dp" />
+
+    <!-- Display selected file name -->
+    <TextView
+        android:id="@+id/textViewFilePath"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No file selected"
+        android:textColor="#888"
+        android:layout_marginTop="8dp"
+        android:padding="8dp" />
+
+    <!-- Button to post news -->
+    <Button
+        android:id="@+id/buttonPostNews"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Post Communities"
+        android:layout_marginTop="16dp" />
+
+    <!-- News list view -->
+    <ListView
+        android:id="@+id/newsListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="16dp"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp" />
+
+    <TextView
+        android:id="@+id/textViewNewsDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textSize="16sp"
+        android:textColor="#000"
+        android:text="Select a community to view."
+        android:layout_marginTop="8dp"
+        android:background="#f5f5f5" />
+
+</LinearLayout>

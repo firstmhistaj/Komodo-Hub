@@ -6,6 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/schoolback14"
-    tools:context=".ViewGradesActivity">
+    tools:context="com.example.komodo_hub.ViewGradesActivity">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

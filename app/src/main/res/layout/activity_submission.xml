@@ -6,6 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/schoolback14"
-    tools:context=".SubmissionActivity">
+    tools:context="com.example.komodo_hub.SubmissionActivity">
 
 </androidx.constraintlayout.widget.ConstraintLayout>
