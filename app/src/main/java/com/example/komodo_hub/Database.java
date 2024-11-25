@@ -16,6 +16,9 @@ import java.util.List;
 
 public class Database extends SQLiteOpenHelper {
 
+//    private List<HashMap<String, String>> studentsList = new ArrayList<>();
+//    private List<HashMap<String, String>> teachersList = new ArrayList<>();
+
     private static final String DATABASE_NAME = "komodo_hub.db";
     private static final int DATABASE_VERSION = 5;
     private static final String TABLE_USERS = "users";
@@ -111,6 +114,9 @@ public class Database extends SQLiteOpenHelper {
             COLUMN_NEWS_CONTENT + " TEXT NOT NULL, " +  // Ensure content is not missing
             COLUMN_NEWS_LINK + " TEXT, " +
             COLUMN_NEWS_FILE_PATH + " TEXT);";
+
+
+
 
 
     public Database(@Nullable Context context) {
@@ -651,7 +657,51 @@ public class Database extends SQLiteOpenHelper {
     }
 
 
+    @SuppressLint("Range")
+    public HashMap<String, Object> searchUser(String query) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Convert the query to lowercase for case-insensitive search
+        String searchQuery = "%" + query.toLowerCase() + "%";  // SQL wildcard search
+
+        // Define the columns we want to retrieve
+        String[] columns = {
+                COLUMN_USERNAME,
+                COLUMN_FIRSTNAME,
+                COLUMN_LASTNAME,
+                COLUMN_ROLE
+        };
+
+        // SQL query to search for users
+        String selection = COLUMN_USERNAME + " LIKE ? OR " +
+                COLUMN_FIRSTNAME + " LIKE ? OR " +
+                COLUMN_LASTNAME + " LIKE ?";
+
+        // Execute the query with the search parameter
+        Cursor cursor = db.query(TABLE_USERS, columns, selection, new String[]{searchQuery, searchQuery, searchQuery}, null, null, null);
+
+        // If the cursor returns a result, extract the data
+        if (cursor != null && cursor.moveToFirst()) {
+            HashMap<String, Object> result = new HashMap<>();
+            result.put("firstname", cursor.getString(cursor.getColumnIndex(COLUMN_FIRSTNAME)));
+            result.put("lastname", cursor.getString(cursor.getColumnIndex(COLUMN_LASTNAME)));
+            result.put("username", cursor.getString(cursor.getColumnIndex(COLUMN_USERNAME)));
+            result.put("type", cursor.getString(cursor.getColumnIndex(COLUMN_ROLE))); // "student" or "teacher"
+
+            cursor.close();
+            return result; // Return the user details
+        }
+
+        // If no matching user is found
+        if (cursor != null) {
+            cursor.close();
+        }
+        return null;
+    }
+
 }
+
+
 
 
 

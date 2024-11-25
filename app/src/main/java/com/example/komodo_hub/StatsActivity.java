@@ -3,11 +3,17 @@ package com.example.komodo_hub;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.healthcare.R;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,7 +22,8 @@ public class StatsActivity extends AppCompatActivity {
     private Database database;
     private RecyclerView studentsRecyclerView;
     private RecyclerView teachersRecyclerView;
-    private Button backButton;
+    private Button backButton, searchButton;
+    private EditText searchEditText;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -30,6 +37,8 @@ public class StatsActivity extends AppCompatActivity {
         studentsRecyclerView = findViewById(R.id.studentsRecyclerView);
         teachersRecyclerView = findViewById(R.id.teachersRecyclerView);
         backButton = findViewById(R.id.backButton);
+        searchEditText = findViewById(R.id.searchEditText);
+        searchButton = findViewById(R.id.searchButton);
 
         // Initialize the database
         database = new Database(this);
@@ -61,5 +70,38 @@ public class StatsActivity extends AppCompatActivity {
 
         // Back button functionality
         backButton.setOnClickListener(view -> finish());
+
+        // Search button functionality
+        searchButton.setOnClickListener(view -> {
+            String query = searchEditText.getText().toString().trim();
+
+            if (!query.isEmpty()) {
+                // Perform search in the database
+                HashMap<String, Object> searchResult = database.searchUser(query);
+
+                if (searchResult != null) {
+                    String userType = (String) searchResult.get("type"); // "student" or "teacher"
+                    String firstName = (String) searchResult.get("firstname");
+                    String lastName = (String) searchResult.get("lastname");
+                    String username = (String) searchResult.get("username");
+
+                    // Create a dialog to display the user's information
+                    AlertDialog.Builder builder = new AlertDialog.Builder(StatsActivity.this);
+                    builder.setTitle("User Details")
+                            .setMessage("First Name: " + firstName + "\n" +
+                                    "Last Name: " + lastName + "\n" +
+                                    "Username: " + username + "\n" +
+                                    "Role: " + userType)
+                            .setPositiveButton("Close", (dialog, id) -> dialog.dismiss())
+                            .create()
+                            .show();
+                } else {
+                    Toast.makeText(StatsActivity.this, "No user found!", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(StatsActivity.this, "Please enter a name or username to search.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }
