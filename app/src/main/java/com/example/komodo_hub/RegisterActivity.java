@@ -19,7 +19,7 @@ import com.example.healthcare.R;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText edFirstName, edUsername, edEmail, edPassword, edConfirm;
+    private EditText edFirstName, edLastName, edUsername, edEmail, edPassword, edConfirm;
     private Button btnRegister;
     private TextView tvExistingUser;
     private Spinner userRoleSpinner;
@@ -37,6 +37,8 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         // Initialize UI elements
+        edFirstName = findViewById(R.id.editTextFirstname);
+        edLastName = findViewById(R.id.editTextLastname);
         edUsername = findViewById(R.id.editTextRegUsername);
         edEmail = findViewById(R.id.editTextRegEmail);
         edPassword = findViewById(R.id.editTextRegPassword);
@@ -59,6 +61,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerUser() {
+        String firstName = edFirstName.getText().toString().trim();
+        String lastName = edLastName.getText().toString().trim();
         String username = edUsername.getText().toString().trim();
         String email = edEmail.getText().toString().trim();
         String password = edPassword.getText().toString();
@@ -83,7 +87,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         // Register user with role
-        if (db.register(username, email, password, selectedRole)) {
+        if (db.register(username, firstName, lastName, email, password, selectedRole)) {
             Toast.makeText(getApplicationContext(), "Registration successful", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(RegisterActivity.this, AdminDashboardActivity.class));
             finish(); // Close RegisterActivity

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,37 +16,51 @@ import com.example.healthcare.R;
 
 public class AdminDashboardActivity extends AppCompatActivity {
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin);
+
+        // Handle window insets for edge-to-edge layout
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        Button buttonAddUser = findViewById(R.id.buttonAddUser);
+        // Find the back button (ImageButton) by its ID
+        ImageButton backButton = findViewById(R.id.buttonBack);
 
-        // Set an OnClickListener for the button
+        // Set a click listener for the back button to navigate to LoginActivity
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an intent to navigate back to LoginActivity
+                Intent intent = new Intent(AdminDashboardActivity.this, LoginActivity.class);
+
+                // Optionally, clear the activity stack to prevent navigating back to AdminDashboardActivity
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                // Start the LoginActivity
+                startActivity(intent);
+
+                // Finish the current AdminDashboardActivity to remove it from the back stack
+                finish();
+            }
+        });
+
+        // Handle buttons for User Management
+        Button buttonAddUser = findViewById(R.id.buttonAddUser);
         buttonAddUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // This is where you handle what happens when the button is clicked
-                // For example, to start a new activity:
-                Intent intent = new Intent(AdminDashboardActivity.this, RegisterActivity.class);  // Replace ViewCourseActivity with the activity you want to navigate to
+                Intent intent = new Intent(AdminDashboardActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
-
         });
 
-
         Button buttonEditUser = findViewById(R.id.buttonEditUser);
-
-        // Set click listener for Update User button
         buttonEditUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,18 +69,23 @@ public class AdminDashboardActivity extends AppCompatActivity {
             }
         });
 
+        Button buttonDeleteUser = findViewById(R.id.buttonDeleteUser);
+        buttonDeleteUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdminDashboardActivity.this, DeleteUserActivity.class);
+                startActivity(intent);
+            }
+        });
 
+        // Handle buttons for Course Management
         Button buttonAddCourse = findViewById(R.id.buttonAddCourse);
-        // Set an OnClickListener for the button
         buttonAddCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // This is where you handle what happens when the button is clicked
-                // For example, to start a new activity:
-                Intent intent = new Intent(AdminDashboardActivity.this, AddCourseActivity.class);  // Replace ViewCourseActivity with the activity you want to navigate to
+                Intent intent = new Intent(AdminDashboardActivity.this, AddCourseActivity.class);
                 startActivity(intent);
             }
-
         });
 
         Button buttonUpdateCourse = findViewById(R.id.buttonUpdateCourse);
@@ -73,38 +93,18 @@ public class AdminDashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AdminDashboardActivity.this, EditCourseActivity.class);
-
                 startActivity(intent);
             }
         });
 
-        // Add the OnClickListener for "View System Stats" button
+        // Handle the View System Stats button
         Button buttonViewStats = findViewById(R.id.admin_view_stats_btn);
         buttonViewStats.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Open StatsActivity to show the system stats
                 Intent intent = new Intent(AdminDashboardActivity.this, StatsActivity.class);
                 startActivity(intent);
             }
         });
-
-        // Add the OnClickListener for "View System Stats" button
-        Button buttonDeleteUser = findViewById(R.id.buttonDeleteUser);
-        buttonDeleteUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Open StatsActivity to show the system stats
-                Intent intent = new Intent(AdminDashboardActivity.this, DeleteUserActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-
     }
-
-
-
-
 }

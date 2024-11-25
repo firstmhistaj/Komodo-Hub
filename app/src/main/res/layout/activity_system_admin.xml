@@ -3,13 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/schoolback14"
-    android:padding="24dp">
+    android:padding="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:paddingTop="16dp">
 
         <!-- Title TextView -->
         <TextView
@@ -21,6 +22,17 @@
             android:textStyle="bold"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="24dp" />
+
+        <!-- School Information Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="School Information"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp" />
 
         <!-- School Name Input -->
         <EditText
@@ -88,29 +100,77 @@
             android:layout_marginBottom="16dp" />
 
         <!-- Postal Code Input -->
+
+        <!-- Buttons for School Section -->
         <EditText
             android:id="@+id/editPostalCode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Postal Code"
+            android:layout_marginBottom="24dp"
             android:backgroundTint="@color/colorWhite"
-            android:textColorHint="@color/colorWhite"
-            android:textColor="@color/colorWhite"
-            android:padding="12dp"
+            android:hint="Postal Code"
             android:inputType="number"
-            android:layout_marginBottom="24dp" />
+            android:padding="12dp"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorWhite" />
 
-        <!-- Register School Button -->
-        <Button
-            android:id="@+id/btnRegisterSchool"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Register School"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="24dp"
+            android:weightSum="3">
+
+            <!-- Register School Button -->
+            <Button
+                android:id="@+id/btnRegisterSchool"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Register"
+                android:padding="12dp"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp"
+                android:minHeight="48dp"
+                android:textSize="14sp" />
+
+            <!-- Update School Button -->
+            <Button
+                android:id="@+id/btnUpdateSchool"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Update"
+                android:padding="12dp"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp"
+                android:minHeight="48dp"
+                android:textSize="14sp" />
+
+            <!-- Delete School Button -->
+            <Button
+                android:id="@+id/btnDeleteSchool"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Delete"
+                android:padding="12dp"
+                android:textStyle="bold"
+                android:minHeight="48dp"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Admin Information Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Admin Information"
             android:textColor="@color/colorWhite"
-            android:padding="12dp"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="24dp" />
+            android:layout_marginBottom="16dp" />
 
         <!-- School Admin Username Input -->
         <EditText
@@ -124,6 +184,8 @@
             android:padding="12dp"
             android:inputType="text"
             android:layout_marginBottom="16dp" />
+
+
 
         <!-- School Admin Email Input -->
         <EditText
@@ -164,23 +226,63 @@
             android:inputType="text"
             android:layout_marginBottom="24dp" />
 
-        <!-- Register Admin Button -->
-        <Button
-            android:id="@+id/btnRegisterAdmin"
+        <!-- Buttons for Admin Section -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Register Admin"
-            android:textColor="@color/colorWhite"
-            android:padding="12dp"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="24dp" />
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="24dp"
+            android:weightSum="3">
+
+            <!-- Register Admin Button -->
+            <Button
+                android:id="@+id/btnRegisterAdmin"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Register"
+                android:padding="12dp"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp"
+                android:minHeight="48dp"
+                android:textSize="14sp" />
+
+            <!-- Update Admin Button -->
+            <Button
+                android:id="@+id/btnUpdateAdmin"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Update"
+                android:padding="12dp"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp"
+                android:minHeight="48dp"
+                android:textSize="14sp" />
+
+            <!-- Delete Admin Button -->
+            <Button
+                android:id="@+id/btnDeleteAdmin"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Delete"
+                android:padding="12dp"
+                android:textStyle="bold"
+                android:minHeight="48dp"
+                android:textSize="14sp" />
+        </LinearLayout>
 
         <!-- Back Button to Login -->
         <Button
             android:id="@+id/btnBackToLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Back to Login" />
+            android:text="Back to Login"
+            android:padding="12dp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+
     </LinearLayout>
 </ScrollView>

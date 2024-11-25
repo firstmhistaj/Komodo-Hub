@@ -17,7 +17,7 @@ import java.util.List;
 public class Database extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "komodo_hub.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     private static final String TABLE_USERS = "users";
     private static final String TABLE_MESSAGES = "messages";
     private static final String TABLE_COURSES = "courses";
@@ -25,7 +25,10 @@ public class Database extends SQLiteOpenHelper {
     private static final String TABLE_SCHOOLS = "schools";  // Added schools table
     private static final String TABLE_NEWS = "news";  // New news table
 
+
     private static final String COLUMN_USERNAME = "username";
+    private static final String COLUMN_FIRSTNAME = "firstname";
+    private static final String COLUMN_LASTNAME = "lastname";
     private static final String COLUMN_EMAIL = "email";
     private static final String COLUMN_PASSWORD = "password";
     private static final String COLUMN_ROLE = "role"; // Role column added
@@ -43,9 +46,15 @@ public class Database extends SQLiteOpenHelper {
     private static final String COLUMN_ASSIGNED_USER = "assigned_user";  // Username from TABLE_USERS
     private static final String COLUMN_ASSIGNED_COURSE_ID = "assigned_course_id"; // Course ID from TABLE_COURSES
 
+    // Columns for Schools Table
     private static final String COLUMN_SCHOOL_ID = "school_id";
-    private static final String COLUMN_SCHOOL_NAME = "school_name";  // School name
-
+    private static final String COLUMN_SCHOOL_NAME = "school_name";
+    private static final String COLUMN_SCHOOL_ADDRESS = "address";
+    private static final String COLUMN_SCHOOL_CITY = "city";
+    private static final String COLUMN_SCHOOL_STATE = "state";
+    private static final String COLUMN_SCHOOL_COUNTRY = "country";
+    private static final String COLUMN_SCHOOL_POSTAL_CODE = "postal_code";
+    
     // News Table
     private static final String COLUMN_NEWS_ID = "news_id";
     private static final String COLUMN_NEWS_TITLE = "news_title";
@@ -68,10 +77,14 @@ public class Database extends SQLiteOpenHelper {
             "FOREIGN KEY(" + COLUMN_ASSIGNED_COURSE_ID + ") REFERENCES " + TABLE_COURSES + "(" + COLUMN_COURSE_ID + "));";
 
     private static final String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + " (" +
-            COLUMN_USERNAME + " TEXT PRIMARY KEY, " +
-            COLUMN_EMAIL + " TEXT, " +
+            COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLUMN_USERNAME + " TEXT UNIQUE, " +
+            COLUMN_FIRSTNAME + " TEXT, " +
+            COLUMN_LASTNAME + " TEXT, " +
+            COLUMN_EMAIL + " TEXT UNIQUE, " +
             COLUMN_PASSWORD + " TEXT, " +
-            COLUMN_ROLE + " TEXT);"; // Create table with role column
+            COLUMN_ROLE + " TEXT" +
+            ");";
 
     // SQL statement to create the messages table
     private static final String CREATE_MESSAGES_TABLE = "CREATE TABLE " + TABLE_MESSAGES + " (" +
@@ -84,7 +97,12 @@ public class Database extends SQLiteOpenHelper {
     // SQL statement to create the schools table (new table)
     private static final String CREATE_SCHOOLS_TABLE = "CREATE TABLE " + TABLE_SCHOOLS + " (" +
             COLUMN_SCHOOL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            COLUMN_SCHOOL_NAME + " TEXT UNIQUE NOT NULL);";
+            COLUMN_SCHOOL_NAME + " TEXT UNIQUE NOT NULL, " +
+            COLUMN_SCHOOL_ADDRESS + " TEXT, " +
+            COLUMN_SCHOOL_CITY + " TEXT, " +
+            COLUMN_SCHOOL_STATE + " TEXT, " +
+            COLUMN_SCHOOL_COUNTRY + " TEXT, " +
+            COLUMN_SCHOOL_POSTAL_CODE + " TEXT);";
 
     private static final String CREATE_NEWS_TABLE = "CREATE TABLE " + TABLE_NEWS + " (" +
             COLUMN_NEWS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -169,10 +187,12 @@ public class Database extends SQLiteOpenHelper {
 
 
     // Method to register a user (now with role)
-    public boolean register(String username, String email, String password, String role) {
+    public boolean register(String username, String firstName, String lastName, String email, String password, String role) {
         // Create ContentValues object to store the user details
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_USERNAME, username);
+        cv.put(COLUMN_FIRSTNAME, firstName); // Add first name
+        cv.put(COLUMN_LASTNAME, lastName);   // Add last name
         cv.put(COLUMN_EMAIL, email);
         cv.put(COLUMN_PASSWORD, password);
         cv.put(COLUMN_ROLE, role); // Store the role in the database
@@ -328,7 +348,7 @@ public class Database extends SQLiteOpenHelper {
 
 
     // Method to add a school
-    public boolean addSchool(String schoolName) {
+    public boolean addSchool(String schoolName, String address, String city, String state, String country, String postalCode) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         // Check if the school already exists
@@ -339,9 +359,16 @@ public class Database extends SQLiteOpenHelper {
             return false;
         }
         cursor.close();
+
         // Insert new school
         ContentValues values = new ContentValues();
         values.put(COLUMN_SCHOOL_NAME, schoolName);
+        values.put(COLUMN_SCHOOL_ADDRESS, address);
+        values.put(COLUMN_SCHOOL_CITY, city);
+        values.put(COLUMN_SCHOOL_STATE, state);
+        values.put(COLUMN_SCHOOL_COUNTRY, country);
+        values.put(COLUMN_SCHOOL_POSTAL_CODE, postalCode);
+
         long result = db.insert(TABLE_SCHOOLS, null, values);
         db.close();
         return result != -1;
@@ -361,6 +388,47 @@ public class Database extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return schools;
+    }
+
+
+
+    public boolean updateSchool(String schoolName, String addressLine1, String city, String state, String country, String postalCode) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        // Add the updated values
+        cv.put(COLUMN_SCHOOL_ADDRESS, addressLine1);
+        cv.put(COLUMN_SCHOOL_CITY, city);
+        cv.put(COLUMN_SCHOOL_STATE, state);
+        cv.put(COLUMN_SCHOOL_COUNTRY, country);
+        cv.put(COLUMN_SCHOOL_POSTAL_CODE, postalCode);
+
+        // Update the school based on its name
+        int rowsAffected = db.update(
+                TABLE_SCHOOLS,
+                cv,
+                COLUMN_SCHOOL_NAME + " = ?",
+                new String[]{schoolName}
+        );
+
+        db.close();
+        // Return true if at least one row was updated
+        return rowsAffected > 0;
+    }
+
+    public boolean deleteSchool(String schoolName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Delete the school record where the school name matches
+        int rowsAffected = db.delete(
+                TABLE_SCHOOLS,
+                COLUMN_SCHOOL_NAME + " = ?",
+                new String[]{schoolName}
+        );
+
+        db.close();
+        // Return true if at least one row was deleted
+        return rowsAffected > 0;
     }
 
     // Method to update user details in the database
@@ -388,43 +456,48 @@ public class Database extends SQLiteOpenHelper {
     }
 
 
-    public HashMap<String, Integer> getUserStats() {
-        HashMap<String, Integer> stats = new HashMap<>();
+    public HashMap<String, Object> getUserStats() {
         SQLiteDatabase db = this.getReadableDatabase();
+        HashMap<String, Object> stats = new HashMap<>();
+        Cursor cursor = null;
 
-        // Query to count the number of students
-        Cursor studentCursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_USERS + " WHERE " + COLUMN_ROLE + " = ?", new String[]{"student"});
-        if (studentCursor.moveToFirst()) {
-            int studentCount = studentCursor.getInt(0);
-            stats.put("students", studentCount);
-            Log.d("Database", "Number of students: " + studentCount);
+        // Query to count the total number of users
+        String totalUsersQuery = "SELECT COUNT(*) AS total_users FROM " + TABLE_USERS;
+        cursor = db.rawQuery(totalUsersQuery, null);
+        if (cursor.moveToFirst()) {
+            stats.put("total_users", cursor.getInt(cursor.getColumnIndexOrThrow("total_users")));
         }
-        studentCursor.close();
+        cursor.close();
 
-        // Query to count the number of teachers
-        Cursor teacherCursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_USERS + " WHERE " + COLUMN_ROLE + " = ?", new String[]{"teacher"});
-        if (teacherCursor.moveToFirst()) {
-            int teacherCount = teacherCursor.getInt(0);
-            stats.put("teachers", teacherCount);
-            Log.d("Database", "Number of teachers: " + teacherCount);
+        // Query to get details of students
+        String studentsQuery = "SELECT firstname, lastname, username, password FROM " + TABLE_USERS + " WHERE role = 'Student'";
+        cursor = db.rawQuery(studentsQuery, null);
+        List<HashMap<String, String>> students = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            HashMap<String, String> student = new HashMap<>();
+            student.put("firstname", cursor.getString(cursor.getColumnIndexOrThrow("firstname")));
+            student.put("lastname", cursor.getString(cursor.getColumnIndexOrThrow("lastname")));
+            student.put("username", cursor.getString(cursor.getColumnIndexOrThrow("username")));
+            student.put("password", cursor.getString(cursor.getColumnIndexOrThrow("password")));
+            students.add(student);
         }
-        teacherCursor.close();
+        stats.put("students", students);
+        cursor.close();
 
-        // Query to count the number of other roles (if needed)
-        Cursor adminCursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_USERS + " WHERE " + COLUMN_ROLE + " = ?", new String[]{"admin"});
-        if (adminCursor.moveToFirst()) {
-            int adminCount = adminCursor.getInt(0);
-            stats.put("admins", adminCount);
+        // Query to get details of teachers
+        String teachersQuery = "SELECT firstname, lastname, username, password FROM " + TABLE_USERS + " WHERE role = 'Teacher'";
+        cursor = db.rawQuery(teachersQuery, null);
+        List<HashMap<String, String>> teachers = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            HashMap<String, String> teacher = new HashMap<>();
+            teacher.put("firstname", cursor.getString(cursor.getColumnIndexOrThrow("firstname")));
+            teacher.put("lastname", cursor.getString(cursor.getColumnIndexOrThrow("lastname")));
+            teacher.put("username", cursor.getString(cursor.getColumnIndexOrThrow("username")));
+            teacher.put("password", cursor.getString(cursor.getColumnIndexOrThrow("password")));
+            teachers.add(teacher);
         }
-        adminCursor.close();
-
-        // Query to count total number of users
-        Cursor totalUsersCursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_USERS, null);
-        if (totalUsersCursor.moveToFirst()) {
-            int totalUserCount = totalUsersCursor.getInt(0);
-            stats.put("total_users", totalUserCount);
-        }
-        totalUsersCursor.close();
+        stats.put("teachers", teachers);
+        cursor.close();
 
         db.close();
         return stats;
@@ -501,6 +574,80 @@ public class Database extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return newsDetails;
+    }
+
+    // Register school admin
+    public boolean register(String adminUsername, String adminEmail, String adminPassword, String adminRole) {
+        // Create ContentValues object to hold the data to be inserted
+        ContentValues cv = new ContentValues();
+        cv.put("username", adminUsername);
+        cv.put("email", adminEmail);
+        cv.put("password", adminPassword);
+        cv.put("role", adminRole); // Role column
+
+        // Get writable database instance
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            // Insert the data into the database
+            long result = db.insert("users", null, cv); // 'users' is the table name
+            return result != -1; // Return true if insertion was successful
+        } catch (Exception e) {
+            // Log any exceptions for debugging
+            Log.e("DatabaseError", "Error registering admin: " + e.getMessage());
+            return false;
+        } finally {
+            // Close the database to release resources
+            db.close();
+        }
+    }
+
+    public int getTotalCoursesCount() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // SQL query to count the total number of courses
+        String query = "SELECT COUNT(*) FROM courses";
+
+        // Execute the query
+        Cursor cursor = db.rawQuery(query, null);
+
+        int totalCourses = 0;
+        if (cursor.moveToFirst()) {
+            totalCourses = cursor.getInt(0);  // Get the count from the first column
+        }
+
+        cursor.close();
+        db.close();
+
+        return totalCourses;
+    }
+
+
+    public List<String> getCoursesAssignedToUser(String username) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Query to fetch courses assigned to the user by joining course_assignments and courses
+        String query = "SELECT c." + COLUMN_COURSE_NAME +
+                " FROM " + TABLE_COURSE_ASSIGNMENTS + " ca " +
+                " JOIN " + TABLE_COURSES + " c ON ca." + COLUMN_ASSIGNED_COURSE_ID + " = c." + COLUMN_COURSE_ID +
+                " WHERE ca." + COLUMN_ASSIGNED_USER + " = ?";
+
+        // Execute the query
+        Cursor cursor = db.rawQuery(query, new String[]{username});
+
+        // Initialize the list of courses
+        List<String> courses = new ArrayList<>();
+
+        // Add course names to the list
+        while (cursor.moveToNext()) {
+            @SuppressLint("Range") String courseName = cursor.getString(cursor.getColumnIndex(COLUMN_COURSE_NAME));
+            courses.add(courseName);
+        }
+
+        // Close the cursor and database connection
+        cursor.close();
+        db.close();
+
+        return courses;
     }
 
 
